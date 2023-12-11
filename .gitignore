@@ -128,3 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# No node modules
+server/node_modules
+client/node_modules
+tools/node_modules
