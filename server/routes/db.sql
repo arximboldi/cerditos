@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS banks (
-       name VARCHAR(24) PRIMARY KEY not null,
+       name TEXT PRIMARY KEY not null,
        is_open BOOLEAN DEFAULT true,
        key INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS pigs (
-       id INTEGER PRIMARY KEY not null,
-       bank VARCHAR(24) DEFAULT null,
+       id TEXT PRIMARY KEY not null,
+       bank TEXT DEFAULT null,
        ready BOOLEAN DEFAULT false,
        dream TEXT,
        notes TEXT,
