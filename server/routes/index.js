@@ -1,4 +1,5 @@
 var express = require('express');
+var logger = require('morgan');
 var router = express.Router();
 
 /* GET home page. */
