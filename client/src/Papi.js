@@ -6,6 +6,21 @@ import readPig from './reader';
 const client = axios.create({baseURL: "/api"});
 
 
+client.interceptors.request.use(function (config) {
+  document.body.classList.add('loading-indicator');
+  return config
+}, function (error) {
+  return Promise.reject(error);
+});
+
+client.interceptors.response.use(function (response) {
+  document.body.classList.remove('loading-indicator');
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+});
+
+
 function Papi() {
     const [started, setStarted] = useState(false);
 
@@ -24,25 +39,32 @@ function Papi() {
         setCandidates((v) => v.delete(id));
     }
 
-    function updateStatus() {
-        client.get("/state").then(data => {
-            console.log("Received data!", data.data);
-            const newStatus = data.data;
-            newStatus.pigs = new Map(data.data.pigs.map((p) => [p.id, p]));
-            setStatus(data.data);
-        });
+    async function updateStatus() {
+        const data = await client.get("/state")
+        console.log("Received data!", data.data);
+        const newStatus = data.data;
+        newStatus.pigs = new Map(data.data.pigs.map((p) => [p.id, p]));
+        setStatus(data.data);
     }
 
-    function insertCandidate(id) {
+    async function insertPigCandidate(id) {
         setCandidates((v) => v.set(id, 'adding'));
-        client.post('/add', {id: id})
+        try {
+            await client.post('/add', {id: id})
+            await updateStatus()
+            discardCandidate(id)
+        } catch(err) {
+            console.log("Error adding candidate:", err);
+            setCandidates((v) => v.set(id, 'error'))
+        }
+    }
+
+    function removePig(id) {
+        client.post('/remove', {id: id})
             .then(() => {
-                console.log("Added candidate!")
-                discardCandidate(id)
+                console.log("Remove pig!")
                 updateStatus();
             }).catch((err) => {
-                console.log("Error adding candidate:", err);
-                setCandidates((v) => v.set(id, 'error'))
             });
     }
 
@@ -67,7 +89,7 @@ function Papi() {
     const popups = candidates.toArray().map(([k, v]) => {
         return <div key={k}>
                    <p>{k}</p> <p>{v}</p>
-                   <button onClick={()=>insertCandidate(k)}
+                   <button onClick={()=>insertPigCandidate(k)}
                            disabled={v === 'adding'}>
                        Añadir
                    </button>
@@ -77,8 +99,13 @@ function Papi() {
                </div>
     })
 
-    const pigs = status.pigs.toArray().map(p => {
-        return <p>{JSON.stringify(p)}</p>
+    const pigs = status.pigs.toArray().map(([id, p]) => {
+        return <div key={id}>
+                   {id}
+                   <button onClick={()=>removePig(id)}>
+                       BORRAR
+                   </button>
+               </div>
     });
 
     return <div className="papi">

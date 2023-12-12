@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.loading-indicator:after {
+    content: 'Loading';
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1001;
+    color: red;
+    text-align:center;
+    text-transform: uppercase;
+    font-weight:bold;
+}

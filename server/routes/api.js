@@ -72,4 +72,10 @@ router.post('/add', wrapper(async (req, res) => {
     res.send({id: req.body.id});
 }))
 
+router.post('/remove', wrapper(async (req, res) => {
+    console.log("removing pig:", req.body.id);
+    await db.run('DELETE FROM pigs WHERE id=?', req.body.id);
+    res.send({id: req.body.id});
+}))
+
 module.exports = router;
