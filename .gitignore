@@ -133,3 +133,6 @@ dist
 server/node_modules
 client/node_modules
 tools/node_modules
+
+# no state
+state/db.sqlite3
