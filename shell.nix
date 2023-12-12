@@ -7,9 +7,9 @@ with pkgs;
 
 pkgs.mkShell {
   inputsFrom = [
-    client
-    server
-    tools
+    # client
+    # server
+    # tools
   ];
   packages = [
     curl
@@ -32,9 +32,9 @@ pkgs.mkShell {
       fi
     }
 
-    add-safe-symlink "${client-modules}" client/node_modules
-    add-safe-symlink "${server-modules}" server/node_modules
-    add-safe-symlink "${tools-modules}" tools/node_modules
+    pushd "$REPO_ROOT/client"; npm install; popd
+    pushd "$REPO_ROOT/server"; npm install; popd
+    pushd "$REPO_ROOT/tools"; npm install; popd
 
     addToSearchPath PATH "$REPO_ROOT/client/node_modules/.bin"
     addToSearchPath PATH "$REPO_ROOT/server/node_modules/.bin"
