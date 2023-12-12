@@ -17,6 +17,7 @@ client.interceptors.response.use(function (response) {
   document.body.classList.remove('loading-indicator');
   return response;
 }, function (error) {
+  document.body.classList.remove('loading-indicator');
   return Promise.reject(error);
 });
 
