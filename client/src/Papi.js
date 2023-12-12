@@ -9,7 +9,10 @@ const client = axios.create({baseURL: "/api"});
 function Papi() {
     const [started, setStarted] = useState(false);
 
-    const [status, setStatus] = useState(null);
+    const [status, setStatus] = useState({
+        banks: [],
+        pigs: [],
+    });
 
     console.log("started", started);
     useEffect(() => {
@@ -22,19 +25,26 @@ function Papi() {
 
     useEffect(() => {
         console.log("Requesting status")
-        client.get("/status").then(data => {
+        client.get("/state").then(data => {
             console.log("Received data!", data.data);
             setStatus(data.data);
         });
     }, []);
 
+    const intro = started
+          ? (<p>Escaneando....</p>)
+          : (<button onClick={()=>setStarted(true)}>ESCANEAR!</button>);
+
+    const pigs = status.pigs.map(p => {
+        <p>{JSON.stringify(p)}</p>
+    });
+
     return <div className="papi">
-               <p>This is the papi interface!</p>
-               {started
-                ? (<p>Scanning....</p>)
-                : (<button onClick={()=>setStarted(true)}>ENABLE SCAN</button>)}
+               <h1>El panel de papi!</h1>
+               {intro}
                <hr/>
-               Hola
+               <h3>Cerditos</h3>
+               <div>{pigs}</div>
            </div>
     ;
 }

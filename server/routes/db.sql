@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS pigs (
        ready BOOLEAN DEFAULT false,
        dream TEXT,
        notes TEXT,
+       timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
        FOREIGN KEY (bank) REFERENCES bank(name)
 );
 

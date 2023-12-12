@@ -39,15 +39,27 @@ var db = null;
 
 var router = express.Router();
 
+router.use(express.json());
+
 router.get('/status', async (req, res) => {
     const status = await db.get('SELECT * FROM banks WHERE name=?', defaultBank);
-    const pigCount = await db.get('SELECT count(*) FROM pigs WHERE bank=?', defaultBank);
-    console.log(status);
-    res.json({
-        name: status.name,
-        isOpen: status.is_open,
-        count: pigCount,
+    const count = await db.get('SELECT count(*) as count FROM pigs WHERE bank=?', defaultBank);
+    status.count = count.count;
+    res.send(status);
+});
+
+router.get('/state', async (req, res) => {
+    const banks = await db.all('SELECT * FROM banks');
+    const pigs = await db.all('SELECT * FROM pigs');
+    res.send({
+        banks: banks,
+        pigs: pigs,
     });
 });
+
+router.post('/add', async (req, res) => {
+    console.log("adding pig:", req.body.id);
+    await db.exec('INSERT OR IGNORE INTO pigs (id) VALUES (?)', req.body.id);
+})
 
 module.exports = router;
