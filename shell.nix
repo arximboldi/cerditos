@@ -41,6 +41,7 @@ pkgs.mkShell {
     addToSearchPath PATH "$REPO_ROOT/tools/node_modules/.bin"
 
     # this is for the backend later...
+    export HTTPS=true
     export STATE_DIR="$REPO_ROOT/state"
     test -d "$STATE_DIR" || mkdir -p "$STATE_DIR"
   '';
