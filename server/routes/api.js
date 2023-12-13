@@ -66,6 +66,25 @@ router.get('/state', wrapper(async (req, res) => {
     });
 }));
 
+router.post('/key', wrapper(async (req, res) => {
+    console.log("changing key:", req.body.id);
+    await db.run('UPDATE banks SET key=? WHERE name=?', req.body.id, defaultBank);
+    res.send({id: req.body.id});
+}))
+
+router.post('/toggle', wrapper(async (req, res) => {
+    const {force, key} = req.body;
+    const b = await db.get("SELECT key, is_open FROM banks WHERE name=?", defaultBank);
+    if (force || b.key == key) {
+        await db.run('UPDATE banks SET is_open=? WHERE name=?',
+                     !b.is_open,
+                     defaultBank);
+        res.send({is_open: !b.is_open});
+    } else {
+        res.status(403).send({is_open: b.is_open});
+    }
+}))
+
 router.post('/add', wrapper(async (req, res) => {
     console.log("adding pig:", req.body.id);
     await db.run('INSERT INTO pigs (id) VALUES (?)', req.body.id);

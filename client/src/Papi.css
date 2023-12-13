@@ -3,12 +3,11 @@
     background: black;
     position: fixed;
     height: 100%;
-    width: 100%;
+    width: calc(100% - 1em);
     font-family: monospace;
     color: #00FF00;
     overflow: scroll;
-    padding: 0;
-    margin: 0;
+    padding: .5em;
 }
 
 #papi button {
@@ -61,6 +60,12 @@
     border: 1px dashed white;
 }
 
+.cerditos-menu {
+    display: float;
+    float: right;
+    margin-top: -2.5em;
+}
+
 .candidate p {
     padding: 0;
     margin: 0;
@@ -71,10 +76,15 @@
     margin: 0;
 }
 
+.bank button {
+    display: float;
+    float: right;
+    margin-top: -2em;
+}
+
 .pigs {
     list-style: none;
     padding: 0;
-    margin: 0;
     width: 100%;
 }
 .pigs .pig-id {
@@ -88,8 +98,10 @@
     box-sizing: border-box;
 }
 .pig-id button {
-    display: float;
-    float: right;
+    display: block;
+    position: absolute;
+    right: 1em;
+    margin-top: .25em;
 }
 .pigs span {
     display: table-cell;
@@ -101,8 +113,8 @@
     width: 100%;
 }
 .pigs li {
-    padding: .25em 1em;
-    margin: .5em;
+    padding: .25em .5em .25em .75em;
+    margin: .125em 0;
     background: #222;
 }
 .pigs li {
