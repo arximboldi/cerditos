@@ -1,30 +1,38 @@
 
+:root {
+    --papi-bg: black;
+    --papi-bg2: #282828;
+    --papi-fg: #00ff00;
+    --papi-hl: white;
+    --papi-font: monospace;
+}
+
 #papi {
-    background: black;
+    background: var(--papi-bg);
+    color: var(--papi-fg);
     position: fixed;
     height: 100%;
     width: calc(100% - 1em);
-    font-family: monospace;
-    color: #00FF00;
+    font-family: var(--papi-font);
     overflow: scroll;
     padding: .5em;
 }
 
 #papi button {
     padding: 0 .5em;
-    background-color: black;
-    color: white;
-    font-family: monospace;
-    border: 1px solid white;
+    background-color: var(--papi-bg);
+    color: var(--papi-hl);
+    font-family: var(--papi-font);
+    border: 1px solid var(--papi-hl);
     box-sizing: border-box;
     text-transform: uppercase;
 }
 
 #papi button:active {
-    background-color: black;
-    color: white;
-    font-family: monospace;
-    border: 1px dashed white;
+    background-color: var(--papi-bg);
+    color: var(--papi-hl);
+    font-family: var(--papi-font);
+    border: 1px dashed var(--papi-hl);
 }
 #papi button:disabled {
     opacity: 0.33;
@@ -32,15 +40,15 @@
 
 #papi input {
     padding: 0 .5em;
-    background-color: black;
-    color: white;
-    font-family: monospace;
-    border: 1px dashed white;
+    background-color: var(--papi-bg);
+    color: var(--papi-hl);
+    font-family: var(--papi-font);
+    border: 1px dashed var(--papi-hl);
     box-sizing: border-box;
 }
 
 #papi input:focus, #papi input:active {
-    border: 1px solid white;
+    border: 1px solid var(--papi-hl);
 }
 
 #papi #edit-mode {
@@ -51,13 +59,13 @@
     border: 1px solid #0f0;
 }
 #papi #edit-mode:checked + label {
-    color: white;
-    border: 1px solid white;
+    color: var(--papi-hl);
+    border: 1px solid var(--papi-hl);
 }
 
 #papi #edit-mode:active + label {
-    color: white;
-    border: 1px dashed white;
+    color: var(--papi-hl);
+    border: 1px dashed var(--papi-hl);
 }
 
 .cerditos-menu {
@@ -115,19 +123,19 @@
 .pigs li {
     padding: .25em .5em .25em .75em;
     margin: .125em 0;
-    background: #222;
+    background: var(--papi-bg2);
 }
 .pigs li {
-    border: 1px solid black;
+    border: 1px solid var(--papi-bg);
 }
 .pigs li:hover {
-    border: 1px solid #888;
+    border: 1px solid color-mix(in srgb, var(--papi-hl), transparent 50%);
 }
 .pigs li.selected{
-    border: 1px solid white;
+    border: 1px solid var(--papi-hl);
 }
 .pigs li.selected span{
-    color: white;
+    color: var(--papi-hl);
 }
 
 .selected {
