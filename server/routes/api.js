@@ -78,4 +78,16 @@ router.post('/remove', wrapper(async (req, res) => {
     res.send({id: req.body.id});
 }))
 
+router.post('/dream', wrapper(async (req, res) => {
+    console.log("changing pig dream:", req.body.id, req.body.dream);
+    await db.run('UPDATE pigs SET dream=? WHERE id=?', req.body.dream, req.body.id);
+    res.send({id: req.body.id});
+}))
+
+router.post('/notes', wrapper(async (req, res) => {
+    console.log("changing pig note:", req.body.id, req.body.notes);
+    await db.run('UPDATE pigs SET notes=? WHERE id=?', req.body.notes, req.body.id);
+    res.send({id: req.body.id});
+}))
+
 module.exports = router;

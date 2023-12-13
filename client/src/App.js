@@ -1,6 +1,7 @@
+import Papi from './Papi';
+
 import logo from './logo.svg';
 import './App.css';
-import Papi from './Papi';
 
 import {
     createBrowserRouter,

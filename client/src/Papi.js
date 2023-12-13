@@ -1,28 +1,50 @@
-import { useState, useEffect } from 'react'
+import {
+    useState,
+    useEffect,
+    useCallback,
+} from 'react';
+
 import axios from 'axios';
 import {Map} from 'immutable';
 import readPig from './reader';
 
+import './Papi.css';
+
 const client = axios.create({baseURL: "/api"});
 
-
 client.interceptors.request.use(function (config) {
-  document.body.classList.add('loading-indicator');
-  return config
+    document.body.classList.add('loading-indicator');
+    return config
 }, function (error) {
-  return Promise.reject(error);
+    return Promise.reject(error);
 });
 
 client.interceptors.response.use(function (response) {
-  document.body.classList.remove('loading-indicator');
-  return response;
+    document.body.classList.remove('loading-indicator');
+    return response;
 }, function (error) {
-  document.body.classList.remove('loading-indicator');
-  return Promise.reject(error);
+    document.body.classList.remove('loading-indicator');
+    return Promise.reject(error);
 });
 
+function debounce(wait, func, immediate) {
+    var timeout;
+    return function() {
+        var context = this, args = arguments;
+        var later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+};
 
 function Papi() {
+    const [editMode, setEditMode] = useState(false);
+
     const [started, setStarted] = useState(false);
 
     const [status, setStatus] = useState({
@@ -60,14 +82,23 @@ function Papi() {
         }
     }
 
-    function removePig(id) {
-        client.post('/remove', {id: id})
-            .then(() => {
-                console.log("Remove pig!")
-                updateStatus();
-            }).catch((err) => {
-            });
+    async function removePig(id) {
+        await client.post('/remove', {id: id});
+        console.log("Remove pig!");
+        updateStatus();
     }
+
+    const changeDream = useCallback(debounce(200, async (id, dream) => {
+        console.log("changing dream: ", id, dream)
+        await client.post("/dream", {id: id, dream: dream});
+        await updateStatus();
+    }));
+
+    const changeNotes = useCallback(debounce(200, async (id, dream) => {
+        console.log("changing dream: ", id, dream)
+        await client.post("/notes", {id: id, notes: dream});
+        await updateStatus();
+    }));
 
     useEffect(() => {
         if (started) {
@@ -101,11 +132,29 @@ function Papi() {
     })
 
     const pigs = status.pigs.toArray().map(([id, p]) => {
-        return <div key={id}>
-                   {id}
-                   <button onClick={()=>removePig(id)}>
-                       BORRAR
-                   </button>
+        const isSelected = candidates.has(id);
+        return <div key={id} className={isSelected ? "selected" : ""}>
+                   <p>{id}
+                       {editMode ? (
+                           <button onClick={()=>removePig(id)}>
+                               BORRAR
+                           </button>
+                       ) : null}
+                   </p>
+                   <p>
+                       <span>sueño:</span>
+                       {!editMode ? p.dream : (
+                           <input defaultValue={p.dream || ""}
+                                  onChange={(e)=>changeDream(id, e.target.value)}/>
+                       )}
+                   </p>
+                   <p>
+                       <span>notas:</span>
+                       {!editMode ? p.notes : (
+                           <input defaultValue={p.notes || ""}
+                                  onChange={(e)=>changeNotes(id, e.target.value)}/>
+                       )}
+                   </p>
                </div>
     });
 
@@ -115,6 +164,12 @@ function Papi() {
                {popups}
                <hr/>
                <h3>Cerditos</h3>
+               <div>
+                   <input type="checkbox" id="edit-mode"
+                          defaultChecked={editMode}
+                          onChange={(e)=>setEditMode(e.target.checked)}/>
+                   <label htmlFor="edit-mode">Edit mode</label>
+               </div>
                <div>{pigs}</div>
            </div>
     ;
