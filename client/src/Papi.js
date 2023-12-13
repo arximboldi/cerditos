@@ -119,25 +119,28 @@ function Papi() {
           : (<button onClick={()=>setStarted(true)}>ESCANEAR!</button>);
 
     const popups = candidates.toArray().map(([k, v]) => {
-        return <div key={k}>
-                   <p>{k}</p> <p>{v}</p>
+        const isDisabled = v === 'adding' || status.pigs.has(k);
+        return <li className="candidate" key={k}>
+                   <p>{k}</p>
                    <button onClick={()=>insertPigCandidate(k)}
-                           disabled={v === 'adding'}>
+                           disabled={isDisabled}>
                        Añadir
                    </button>
+                   <span>&nbsp;</span>
                    <button onClick={()=>discardCandidate(k)}>
                        Descartar
                    </button>
-               </div>
+               </li>
     })
 
     const pigs = status.pigs.toArray().map(([id, p]) => {
         const isSelected = candidates.has(id);
-        return <div key={id} className={isSelected ? "selected" : ""}>
-                   <p>{id}
+        return <li key={id}
+                    className={isSelected ? "selected" : ""}>
+                   <p className="pig-id"><span>{id}</span>
                        {editMode ? (
                            <button onClick={()=>removePig(id)}>
-                               BORRAR
+                               Borrar
                            </button>
                        ) : null}
                    </p>
@@ -155,14 +158,13 @@ function Papi() {
                                   onChange={(e)=>changeNotes(id, e.target.value)}/>
                        )}
                    </p>
-               </div>
+               </li>
     });
 
-    return <div className="papi">
+    return <div className="papi" id="papi">
                <h1>El panel de papi!</h1>
                {intro}
-               {popups}
-               <hr/>
+               <ul className="candidates">{popups}</ul>
                <h3>Cerditos</h3>
                <div>
                    <input type="checkbox" id="edit-mode"
@@ -170,7 +172,7 @@ function Papi() {
                           onChange={(e)=>setEditMode(e.target.checked)}/>
                    <label htmlFor="edit-mode">Edit mode</label>
                </div>
-               <div>{pigs}</div>
+               <ul className="pigs">{pigs}</ul>
            </div>
     ;
 }

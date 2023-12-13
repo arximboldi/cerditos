@@ -1,4 +1,123 @@
 
+#papi {
+    background: black;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    font-family: monospace;
+    color: #00FF00;
+    overflow: scroll;
+    padding: 0;
+    margin: 0;
+}
+
+#papi button {
+    padding: 0 .5em;
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    border: 1px solid white;
+    box-sizing: border-box;
+    text-transform: uppercase;
+}
+
+#papi button:active {
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    border: 1px dashed white;
+}
+#papi button:disabled {
+    opacity: 0.33;
+}
+
+#papi input {
+    padding: 0 .5em;
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    border: 1px dashed white;
+    box-sizing: border-box;
+}
+
+#papi input:focus, #papi input:active {
+    border: 1px solid white;
+}
+
+#papi #edit-mode {
+    display: none;
+}
+#papi #edit-mode + label {
+    padding: 0 .5em;
+    border: 1px solid #0f0;
+}
+#papi #edit-mode:checked + label {
+    color: white;
+    border: 1px solid white;
+}
+
+#papi #edit-mode:active + label {
+    color: white;
+    border: 1px dashed white;
+}
+
+.candidate p {
+    padding: 0;
+    margin: 0;
+}
+
+.candidates li {
+    padding: .5em 0;
+    margin: 0;
+}
+
+.pigs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+.pigs .pig-id {
+    line-height: 1.5em;
+}
+.pigs p {
+    display:table;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+.pig-id button {
+    display: float;
+    float: right;
+}
+.pigs span {
+    display: table-cell;
+    padding: .25em 0;
+    width: 5em;
+}
+.pigs input {
+    display: table-cell;
+    width: 100%;
+}
+.pigs li {
+    padding: .25em 1em;
+    margin: .5em;
+    background: #222;
+}
+.pigs li {
+    border: 1px solid black;
+}
+.pigs li:hover {
+    border: 1px solid #888;
+}
+.pigs li.selected{
+    border: 1px solid white;
+}
+.pigs li.selected span{
+    color: white;
+}
+
 .selected {
     font-weight: bold;
 }
