@@ -1,5 +1,5 @@
 
-export default function readPig(cb) {
+export function readPig(cb) {
     try {
         console.log("NDEFReader: ", window.NDEFReader)
         const ndef = new window.NDEFReader();

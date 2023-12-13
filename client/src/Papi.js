@@ -4,51 +4,19 @@ import {
     useCallback,
 } from 'react';
 
-import axios from 'axios';
 import {Map} from 'immutable';
-import readPig from './reader';
+
+import {client, debounce, defaultBank} from './service';
+import {readPig} from './reader';
 
 import './Papi.css';
 
-const client = axios.create({baseURL: "/api"});
-const defaultBank = 'olivia';
-
-client.interceptors.request.use(function (config) {
-    document.body.classList.add('loading-indicator');
-    return config
-}, function (error) {
-    return Promise.reject(error);
-});
-
-client.interceptors.response.use(function (response) {
-    document.body.classList.remove('loading-indicator');
-    return response;
-}, function (error) {
-    document.body.classList.remove('loading-indicator');
-    return Promise.reject(error);
-});
-
-function debounce(wait, func, immediate) {
-    var timeout;
-    return function() {
-        var context = this, args = arguments;
-        var later = function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-    };
-};
-
-function Papi() {
+export function Papi() {
     const [editMode, setEditMode] = useState(false);
 
     const [started, setStarted] = useState(false);
 
-    const [status, setStatus] = useState({
+    const [state, setState] = useState({
         banks: new Map(),
         pigs: new Map(),
     });
@@ -63,9 +31,9 @@ function Papi() {
         setCandidates((v) => v.delete(id));
     }
 
-    async function updateStatus() {
+    async function updateState() {
         const {data} = await client.get("/state")
-        setStatus({
+        setState({
             banks: new Map(data.banks.map((p) => [p.name, p])),
             pigs:  new Map(data.pigs.map((p) => [p.id, p])),
         });
@@ -75,7 +43,7 @@ function Papi() {
         setCandidates((v) => v.set(id, 'adding'));
         try {
             await client.post('/add', {id: id})
-            await updateStatus()
+            await updateState()
             discardCandidate(id)
         } catch(err) {
             console.log("Error adding candidate:", err);
@@ -86,31 +54,31 @@ function Papi() {
     async function removePig(id) {
         await client.post('/remove', {id: id});
         console.log("Remove pig!");
-        updateStatus();
+        updateState();
     }
 
     async function makeKey(id) {
         await client.post('/key', {id: id});
         console.log("Make key!");
-        updateStatus();
+        updateState();
     }
 
     async function toggleBank() {
         await client.post('/toggle', {force: true});
-        updateStatus();
+        updateState();
     }
 
     const changeDream = useCallback(debounce(200, async (id, dream) => {
         console.log("changing dream: ", id, dream)
         await client.post("/dream", {id: id, dream: dream});
-        await updateStatus();
-    }));
+        await updateState();
+    }), []);
 
     const changeNotes = useCallback(debounce(200, async (id, dream) => {
         console.log("changing dream: ", id, dream)
         await client.post("/notes", {id: id, notes: dream});
-        await updateStatus();
-    }));
+        await updateState();
+    }), []);
 
     useEffect(() => {
         if (started) {
@@ -122,14 +90,13 @@ function Papi() {
     }, [started]);
 
     useEffect(() => {
-        console.log("Requesting status")
-        updateStatus();
+        console.log("Requesting state")
+        updateState();
     }, []);
 
-
     const popups = candidates.toArray().map(([k, v]) => {
-        const isInserted = v === 'adding' || status.pigs.has(k);
-        const isKey = k == status.banks.get(defaultBank).key;
+        const isInserted = v === 'adding' || state.pigs.has(k);
+        const isKey = k === state.banks.get(defaultBank).key;
         return <li className="candidate" key={k}>
                    <p>{k}</p>
                    <button onClick={()=>makeKey(k)}
@@ -148,7 +115,7 @@ function Papi() {
                </li>
     })
 
-    const pigs = status.pigs.toArray().map(([id, p]) => {
+    const pigs = state.pigs.toArray().map(([id, p]) => {
         const isSelected = candidates.has(id);
         return <li key={id}
                    className={isSelected ? "selected" : ""}>
@@ -176,7 +143,7 @@ function Papi() {
                </li>
     });
 
-    const banks = status.banks.toArray().map(([name, b]) => {
+    const banks = state.banks.toArray().map(([name, b]) => {
         return <li key={name} class="bank">
                    <b>hucha:</b> {b.name}<br/>
                    <b>llave:</b> {b.key}<br/>
