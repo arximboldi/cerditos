@@ -1,0 +1,27 @@
+
+:root {
+    --bebe-bg: #FFB8E5;
+    --bebe-fg: #DE299C;
+    --bebe-font: Sacramento;
+}
+
+#bebe {
+    background: var(--bebe-bg);
+    color: var(--bebe-fg);
+    font-size: 20px;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    font-family: var(--bebe-font);
+    overflow: scroll;
+}
+
+.popup {
+    border: 1px solid var(--bebe-fg);
+    border-radius: 1em;
+    padding: 0.5em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

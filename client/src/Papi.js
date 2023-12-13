@@ -7,14 +7,12 @@ import {
 import {Map} from 'immutable';
 
 import {client, debounce, defaultBank} from './service';
-import {readPig} from './reader';
+import {useScanner} from './scanner';
 
 import './Papi.css';
 
 export function Papi() {
     const [editMode, setEditMode] = useState(false);
-
-    const [started, setStarted] = useState(false);
 
     const [state, setState] = useState({
         banks: new Map(),
@@ -30,6 +28,11 @@ export function Papi() {
     function discardCandidate(id) {
         setCandidates((v) => v.delete(id));
     }
+
+    const scanner = useScanner((pig) => {
+        console.log("Pig read!", pig);
+        addCandidate(pig);
+    });
 
     async function updateState() {
         const {data} = await client.get("/state")
@@ -81,16 +84,7 @@ export function Papi() {
     }), []);
 
     useEffect(() => {
-        if (started) {
-            return readPig((pig) => {
-                console.log("Pig read!", pig);
-                addCandidate(pig);
-            });
-        }
-    }, [started]);
-
-    useEffect(() => {
-        console.log("Requesting state")
+        console.log("Requesting initial state")
         updateState();
     }, []);
 
@@ -162,7 +156,9 @@ export function Papi() {
         <div className="papi" id="papi">
             <h1>El panel de papi!</h1>
             {
-                !started ? (<button onClick={()=>setStarted(true)}>ESCANEAR!</button>)
+                scanner.state === 'idle' ? (<button onClick={scanner.start}>ESCANEAR!</button>)
+                    : scanner.state === 'starting' ? (<p>Empezando a escanear...</p>)
+                    : scanner.state === 'error' ? (<p>No se puede escanear en este dispositivo.</p>)
                     : !popups.length ? (<p>Escaneando....</p>)
                     : null
             }
