@@ -97,86 +97,93 @@ export function Papi() {
     const popups = candidates.toArray().map(([k, v]) => {
         const isInserted = v === 'adding' || state.pigs.has(k);
         const isKey = k === state.banks.get(defaultBank).key;
-        return <li className="candidate" key={k}>
-                   <p>{k}</p>
-                   <button onClick={()=>makeKey(k)}
-                           disabled={isKey || isInserted}>
-                       Hacer llave
-                   </button>
-                   <span>&nbsp;</span>
-                   <button onClick={()=>insertPigCandidate(k)}
-                           disabled={isInserted}>
-                       Añadir
-                   </button>
-                   <span>&nbsp;</span>
-                   <button onClick={()=>discardCandidate(k)}>
-                       Descartar
-                   </button>
-               </li>
+        return (
+            <li className="candidate" key={k}>
+                <p>{k}</p>
+                <button onClick={()=>makeKey(k)}
+                        disabled={isKey || isInserted}>
+                    Hacer llave
+                </button>
+                <span>&nbsp;</span>
+                <button onClick={()=>insertPigCandidate(k)}
+                        disabled={isInserted}>
+                    Añadir
+                </button>
+                <span>&nbsp;</span>
+                <button onClick={()=>discardCandidate(k)}>
+                    Descartar
+                </button>
+            </li>
+        );
     })
 
     const pigs = state.pigs.toArray().map(([id, p]) => {
         const isSelected = candidates.has(id);
-        return <li key={id}
-                   className={isSelected ? "selected" : ""}>
-                   <p className="pig-id"><span>{id}</span>
-                       {editMode ? (
-                           <button onClick={()=>removePig(id)}>
-                               Borrar
-                           </button>
-                       ) : null}
-                   </p>
-                   <p>
-                       <span>sueño:</span>
-                       {!editMode ? p.dream : (
-                           <input defaultValue={p.dream || ""}
-                                  onChange={(e)=>changeDream(id, e.target.value)}/>
-                       )}
-                   </p>
-                   <p>
-                       <span>notas:</span>
-                       {!editMode ? p.notes : (
-                           <input defaultValue={p.notes || ""}
-                                  onChange={(e)=>changeNotes(id, e.target.value)}/>
-                       )}
-                   </p>
-               </li>
+        return (
+            <li key={id}
+                className={isSelected ? "selected" : ""}>
+                <p className="pig-id"><span>{id}</span>
+                    {editMode ? (
+                        <button onClick={()=>removePig(id)}>
+                            Borrar
+                        </button>
+                    ) : null}
+                </p>
+                <p>
+                    <span>sueño:</span>
+                    {!editMode ? p.dream : (
+                        <input defaultValue={p.dream || ""}
+                               onChange={(e)=>changeDream(id, e.target.value)}/>
+                    )}
+                </p>
+                <p>
+                    <span>notas:</span>
+                    {!editMode ? p.notes : (
+                        <input defaultValue={p.notes || ""}
+                               onChange={(e)=>changeNotes(id, e.target.value)}/>
+                    )}
+                </p>
+            </li>
+        );
     });
 
     const banks = state.banks.toArray().map(([name, b]) => {
-        return <li key={name} class="bank">
-                   <b>hucha:</b> {b.name}<br/>
-                   <b>llave:</b> {b.key}<br/>
-                   {!editMode ? null
-                    : (<button onClick={toggleBank}>{b.is_open ? "Cerrar" : "Abrir"}</button>)}
-               </li>;
+        return (
+            <li key={name} class="bank">
+                <b>hucha:</b> {b.name}<br/>
+                <b>llave:</b> {b.key}<br/>
+                {!editMode ? null
+                 : (<button onClick={toggleBank}>{b.is_open ? "Cerrar" : "Abrir"}</button>)}
+            </li>
+        );
     });
 
-    return <div className="papi" id="papi">
-               <h1>El panel de papi!</h1>
-               {
-                   !started ? (<button onClick={()=>setStarted(true)}>ESCANEAR!</button>)
-                       : !popups.length ? (<p>Escaneando....</p>)
-                       : null
-               }
-               <ul className="candidates">{popups}</ul>
-               <h3>
-                   Cerditos
-               </h3>
-               <div class="cerditos-menu">
-                   <input type="checkbox" id="edit-mode"
-                          defaultChecked={editMode}
-                          onChange={(e)=>setEditMode(e.target.checked)}/>
-                   <label htmlFor="edit-mode">EDITAR</label>
-               </div>
-               <ul class="banks">
-                   {banks}
-               </ul>
-               <ul className="pigs">
-                   {pigs}
-               </ul>
-           </div>
-    ;
+    return (
+        <div className="papi" id="papi">
+            <h1>El panel de papi!</h1>
+            {
+                !started ? (<button onClick={()=>setStarted(true)}>ESCANEAR!</button>)
+                    : !popups.length ? (<p>Escaneando....</p>)
+                    : null
+            }
+            <ul className="candidates">{popups}</ul>
+            <h3>
+                Cerditos
+            </h3>
+            <div class="cerditos-menu">
+                <input type="checkbox" id="edit-mode"
+                       defaultChecked={editMode}
+                       onChange={(e)=>setEditMode(e.target.checked)}/>
+                <label htmlFor="edit-mode">EDITAR</label>
+            </div>
+            <ul class="banks">
+                {banks}
+            </ul>
+            <ul className="pigs">
+                {pigs}
+            </ul>
+        </div>
+    );
 }
 
 export default Papi;
