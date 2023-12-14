@@ -25,3 +25,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.coin {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    border-radius: 1em;
+    margin: .125em;
+    background-color: #aaa;
+    background-image: url("pic/pig-pad.svg");
+    background-size: cover;
+}
