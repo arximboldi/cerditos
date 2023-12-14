@@ -13,8 +13,8 @@ export function scanTags({scanFn, errorFn, okFn}) {
         }
 
         function onRead({message, serialNumber}) {
-            console.log(`> Serial Number: ${serialNumber}`);
-            console.log(`> Records: (${message.records.length})`);
+            console.log(`> serial no: ${serialNumber}`);
+            console.log(`> records: (${message.records.length})`);
             scanFn(serialNumber);
         }
 
@@ -25,7 +25,7 @@ export function scanTags({scanFn, errorFn, okFn}) {
             .catch(errorFn);
 
         return () => {
-            console.log("Cleanup!");
+            console.log("cleanup scanner");
             ndef.removeEventListener("readingerror", onError);
             ndef.removeEventListener("reading", onRead);
         };
@@ -46,22 +46,28 @@ export function useScanner(cb) {
         setState('idle');
     };
 
+    const active =
+          state == 'starting' ||
+          state === 'scanning';
+
     useEffect(() => {
-        if (state === 'starting') {
+        if (active) {
             return scanTags({
                 scanFn: (tag) => {
                     console.log("Found tag!", tag);
                     cb(tag)
                 },
                 okFn: () => {
+                    console.log("scan ok")
                     setState('scanning');
                 },
                 errorFn: (err) => {
+                    console.log("scan error")
                     setState('error');
                 },
             });
         }
-    }, [state]);
+    }, [active]);
 
     return {
         state: state,

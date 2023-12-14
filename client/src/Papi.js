@@ -143,7 +143,7 @@ export function Papi() {
 
     const banks = state.banks.toArray().map(([name, b]) => {
         return (
-            <li key={name} class="bank">
+            <li key={name} className="bank">
                 <b>hucha:</b> {b.name}<br/>
                 <b>llave:</b> {b.key}<br/>
                 {!editMode ? null
@@ -166,13 +166,13 @@ export function Papi() {
             <h3>
                 Cerditos
             </h3>
-            <div class="cerditos-menu">
+            <div className="cerditos-menu">
                 <input type="checkbox" id="edit-mode"
                        defaultChecked={editMode}
                        onChange={(e)=>setEditMode(e.target.checked)}/>
                 <label htmlFor="edit-mode">EDITAR</label>
             </div>
-            <ul class="banks">
+            <ul className="banks">
                 {banks}
             </ul>
             <ul className="pigs">
