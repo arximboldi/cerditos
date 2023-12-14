@@ -82,6 +82,7 @@ router.post('/toggle', wrapper(async (req, res) => {
     const {force, key} = req.body;
     const b = await db.get("SELECT key, is_open FROM banks WHERE name=?", defaultBank);
     if (force || b.key == key) {
+        console.log("setting bank:", defaultBank, !b.is_open);
         await db.run('UPDATE banks SET is_open=? WHERE name=?',
                      !b.is_open,
                      defaultBank);

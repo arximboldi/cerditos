@@ -13,9 +13,6 @@ import {client, debounce, defaultBank} from './service';
 import {useScanner} from './scanner';
 
 export function Bebe() {
-    const scanner = useScanner((pig) => {
-        console.log("Un cerdito!", pig);
-    })
 
     const [status, setStatus] = useState({
         bank: {name: defaultBank, is_open: false, key: null},
@@ -29,6 +26,15 @@ export function Bebe() {
             pigs: new Map(data.pigs.map((p) => [p.id, p])),
         });
     }
+
+    const scanner = useScanner((pig) => {
+        console.log("Un cerdito!", pig);
+        console.log("outside:", status.bank.key, pig)
+        if (pig == status.bank.key) {
+            console.log("toggle!");
+            client.post("/toggle", {key: pig}).then(updateStatus);
+        }
+    })
 
     useEffect(() => {
         console.log("Requesting initial status")
@@ -62,7 +68,7 @@ export function Bebe() {
 
     const hucha = (
         <div className="hucha">
-            { status.bank.is_locked ? "🔓" : "🔒"}
+            { status.bank.is_open ? "🔓" : "🔒"}
             <div className="coins">
                 {coins}
             </div>
