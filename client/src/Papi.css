@@ -51,19 +51,19 @@
     border: 1px solid var(--papi-hl);
 }
 
-#papi #edit-mode {
+#papi input[type=checkbox] {
     display: none;
 }
-#papi #edit-mode + label {
+#papi input[type=checkbox] + label {
     padding: 0 .5em;
     border: 1px solid #0f0;
 }
-#papi #edit-mode:checked + label {
+#papi input[type=checkbox]:checked + label {
     color: var(--papi-hl);
     border: 1px solid var(--papi-hl);
 }
 
-#papi #edit-mode:active + label {
+#papi input[type=checkbox]:active + label {
     color: var(--papi-hl);
     border: 1px dashed var(--papi-hl);
 }

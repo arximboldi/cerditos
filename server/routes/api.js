@@ -50,11 +50,16 @@ const wrapper = (controller) => async (req, res, next) => {
 
 router.use(express.json());
 
+// simplified state
 router.get('/status', wrapper(async (req, res) => {
-    const status = await db.get('SELECT * FROM banks WHERE name=?', defaultBank);
+    const bank = await db.get('SELECT * FROM banks WHERE name=?', defaultBank);
     const count = await db.get('SELECT count(*) as count FROM pigs WHERE bank=?', defaultBank);
-    status.count = count.count;
-    res.send(status);
+    const pigs = await db.all('SELECT id, bank, ready, kind FROM pigs');
+    res.send({
+        bank: bank,
+        count: count,
+        pigs: pigs,
+    });
 }));
 
 router.get('/state', wrapper(async (req, res) => {
@@ -139,9 +144,16 @@ router.post('/dream', wrapper(async (req, res) => {
 
 router.post('/notes', wrapper(async (req, res) => {
     const {id, notes} = req.body;
-    console.log("changing pig note:", id, notes);
+    console.log("changing pig notes:", id, notes);
     await db.run('UPDATE pigs SET notes=? WHERE id=?', notes, id);
     res.send({id: id, notes: notes});
+}))
+
+router.post('/kind', wrapper(async (req, res) => {
+    const {id, kind} = req.body;
+    console.log("changing pig kind:", id, kind);
+    await db.run('UPDATE pigs SET kind=? WHERE id=?', kind, id);
+    res.send({id: id, kind: kind});
 }))
 
 module.exports = router;

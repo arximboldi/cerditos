@@ -6,7 +6,7 @@ import {
 
 import {Map} from 'immutable';
 
-import {client, debounce, defaultBank} from './service';
+import {client, debounce, defaultBank, defaultKinds} from './service';
 import {useScanner} from './scanner';
 
 import './Papi.css';
@@ -86,6 +86,12 @@ export function Papi() {
         updateState();
     }
 
+    const changeKind = useCallback(debounce(200, async (id, kind) => {
+        console.log("changing kind: ", id, kind)
+        await client.post("/kind", {id: id, kind: kind});
+        await updateState();
+    }), []);
+
     const changeDream = useCallback(debounce(200, async (id, dream) => {
         console.log("changing dream: ", id, dream)
         await client.post("/dream", {id: id, dream: dream});
@@ -161,6 +167,17 @@ export function Papi() {
                         <input defaultValue={p.notes || ""}
                                onChange={(e)=>changeNotes(id, e.target.value)}/>
                     )}
+                </p>
+                <p>
+                    <span className="pig-label">tipo:</span>
+                    {!editMode ? p.kind : defaultKinds.map((kind) => (
+                        <>
+                            <input type="checkbox" id={`pig-kind-${kind}-${id}`}
+                                   checked={p.kind == kind}
+                                   onChange={(e)=>changeKind(id, kind)}/>
+                            <label htmlFor={`pig-kind-${kind}-${id}`}>{kind}</label>
+                        </>
+                    ))}
                 </p>
             </li>
         );
