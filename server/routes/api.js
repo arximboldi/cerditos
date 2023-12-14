@@ -67,9 +67,10 @@ router.get('/state', wrapper(async (req, res) => {
 }));
 
 router.post('/key', wrapper(async (req, res) => {
-    console.log("changing key:", req.body.id);
-    await db.run('UPDATE banks SET key=? WHERE name=?', req.body.id, defaultBank);
-    res.send({id: req.body.id});
+    const {id} = req.body;
+    console.log("changing key:", id);
+    await db.run('UPDATE banks SET key=? WHERE name=?', id, defaultBank);
+    res.send({id: id});
 }))
 
 router.post('/toggle', wrapper(async (req, res) => {
@@ -86,27 +87,61 @@ router.post('/toggle', wrapper(async (req, res) => {
 }))
 
 router.post('/add', wrapper(async (req, res) => {
-    console.log("adding pig:", req.body.id);
-    await db.run('INSERT INTO pigs (id) VALUES (?)', req.body.id);
-    res.send({id: req.body.id});
+    const {id} = req.body;
+    console.log("adding pig:", id);
+    await db.run('INSERT INTO pigs (id) VALUES (?)', id);
+    res.send({id: id});
 }))
 
 router.post('/remove', wrapper(async (req, res) => {
-    console.log("removing pig:", req.body.id);
-    await db.run('DELETE FROM pigs WHERE id=?', req.body.id);
-    res.send({id: req.body.id});
+    const {id} = req.body;
+    console.log("removing pig:", id);
+    await db.run('DELETE FROM pigs WHERE id=?', id);
+    res.send({id: id});
+}))
+
+router.post('/save', wrapper(async (req, res) => {
+    const {id} = req.body;
+    console.log("put pig in bank:", id);
+    await db.run('UPDATE pigs SET bank=? WHERE id=?', defaultBank, req.body.id);
+    res.send({id: req.body.id, bank: defaultBank});
+}))
+
+router.post('/take', wrapper(async (req, res) => {
+    const {id, force} = req.body;
+    const {is_open} = await db.get('SELECT is_open FROM banks WHERE name=?', defaultBank);
+    if (force || is_open) {
+        console.log("put pig in bank:", id);
+        await db.run('UPDATE pigs SET bank=null, ready=true WHERE id=?', id);
+        res.send({id: id});
+    } else {
+        res.status(403).send({id: id, bank: defaultBank});
+    }
+}))
+
+router.post('/reveal', wrapper(async (req, res) => {
+    const {id, force} = req.body;
+    const {bank, ready, dream} = await db.get('SELECT ready, dream FROM pigs WHERE id=?', id);
+    if (force || (ready && !bank)) {
+        await db.run('UPDATE pigs SET bank=null, ready=false WHERE id=?', id);
+        res.send({id: id, dream: dream});
+    } else {
+        res.status(403).send({id: id});
+    }
 }))
 
 router.post('/dream', wrapper(async (req, res) => {
-    console.log("changing pig dream:", req.body.id, req.body.dream);
-    await db.run('UPDATE pigs SET dream=? WHERE id=?', req.body.dream, req.body.id);
-    res.send({id: req.body.id});
+    const {id, dream} = req.body;
+    console.log("changing pig dream:", id, dream);
+    await db.run('UPDATE pigs SET dream=? WHERE id=?', dream, id);
+    res.send({id: id, dream: dream});
 }))
 
 router.post('/notes', wrapper(async (req, res) => {
-    console.log("changing pig note:", req.body.id, req.body.notes);
-    await db.run('UPDATE pigs SET notes=? WHERE id=?', req.body.notes, req.body.id);
-    res.send({id: req.body.id});
+    const {id, notes} = req.body;
+    console.log("changing pig note:", id, notes);
+    await db.run('UPDATE pigs SET notes=? WHERE id=?', notes, id);
+    res.send({id: id, notes: notes});
 }))
 
 module.exports = router;

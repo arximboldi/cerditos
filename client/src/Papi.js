@@ -60,6 +60,21 @@ export function Papi() {
         updateState();
     }
 
+    async function takePig(id) {
+        await client.post('/take', {id: id, force: true});
+        updateState();
+    }
+
+    async function revealPig(id) {
+        await client.post('/reveal', {id: id, force: true});
+        updateState();
+    }
+
+    async function savePig(id) {
+        await client.post('/save', {id: id});
+        updateState();
+    }
+
     async function makeKey(id) {
         await client.post('/key', {id: id});
         console.log("Make key!");
@@ -116,22 +131,32 @@ export function Papi() {
         return (
             <li key={id}
                 className={isSelected ? "selected" : ""}>
-                <p className="pig-id"><span>{id}</span>
-                    {editMode ? (
-                        <button onClick={()=>removePig(id)}>
-                            Borrar
-                        </button>
-                    ) : null}
+                <p className="pig-header">
+                    <span className="pig-id">{id}</span>
+                    <span className="pig-controls">
+                        <span className="pig-tag">
+                            {!editMode && p.bank == defaultBank? "[hucha]" : null}
+                            {!editMode && p.ready ? "[listo]" : null}
+                        </span>
+                        {editMode ? (
+                            p.bank == defaultBank ? (<button onClick={()=>takePig(id)}>Sacar</button>)
+                                : p.ready ? (<button onClick={()=>revealPig(id)}>Usar</button>)
+                                : (<button onClick={()=>savePig(id)}>Meter</button>)
+                        ) : null}
+                        {editMode ? (
+                            <button onClick={()=>removePig(id)}>Borrar</button>
+                        ) : null}
+                    </span>
                 </p>
                 <p>
-                    <span>sueño:</span>
+                    <span className="pig-label">sueño:</span>
                     {!editMode ? p.dream : (
                         <input defaultValue={p.dream || ""}
                                onChange={(e)=>changeDream(id, e.target.value)}/>
                     )}
                 </p>
                 <p>
-                    <span>notas:</span>
+                    <span className="pig-label">notas:</span>
                     {!editMode ? p.notes : (
                         <input defaultValue={p.notes || ""}
                                onChange={(e)=>changeNotes(id, e.target.value)}/>
