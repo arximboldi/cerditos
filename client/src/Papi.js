@@ -78,6 +78,7 @@ export function Papi() {
     async function makeKey(id) {
         await client.post('/key', {id: id});
         console.log("Make key!");
+        discardCandidate(id);
         updateState();
     }
 
