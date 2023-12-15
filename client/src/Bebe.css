@@ -1,29 +1,86 @@
 
 :root {
-    --bebe-bg: #FFB8E5;
-    --bebe-fg: #DE299C;
-    --bebe-font: Sacramento;
+    --bebe-bg: #9EDFFF;
+    --bebe-bg2: #FFD4F2;
+    --bebe-fg: #C20085;
+    --bebe-hl: #C20085;
+    --bebe-font: Caveat;
+    --bebe-radius1: 1em;
+    --bebe-radius2: .5em;
 }
 
 #bebe {
-    background: var(--bebe-bg);
     color: var(--bebe-fg);
-    font-size: 20px;
+    font-size: 22px;
     position: fixed;
     height: 100%;
     width: 100%;
     font-family: var(--bebe-font);
     overflow: scroll;
+    background-color: var(--bebe-bg);
+    background-image: url("pic/backs.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.lock {
+    font-size: 2.5em;
+    position: absolute;
+    top: .125em;
+    right: .125em;
 }
 
 .popup {
-    border: 1px solid var(--bebe-fg);
-    border-radius: 1em;
+    border: 2px solid var(--bebe-fg);
+    border-radius: var(--bebe-radius1);
+    background-color: var(--bebe-bg2);
     padding: 0.5em;
     position: absolute;
     top: 50%;
     left: 50%;
+    width: 80%;
     transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.popup p {
+    margin: 0;
+    padding: .5em;
+}
+
+#bebe button {
+    display: inline-block;
+    text-align: center;
+    padding: 0 .5em 0 .25em;
+    margin-bottom: .5em;
+    border-radius: var(--bebe-radius2);
+    background-color: var(--bebe-bg2);
+    color: var(--bebe-hl);
+    font-family: var(--bebe-font);
+    font-size: 1em;
+    border: 1px solid var(--bebe-hl);
+    box-sizing: border-box;
+    text-transform: uppercase;
+}
+#bebe button:hover {
+    text-decoration: underline;
+}
+#bebe button:active {
+    background-color: var(--bebe-bg2);
+    color: var(--bebe-hl);
+    font-family: var(--bebe-font);
+    border: 1px dashed var(--bebe-hl);
+}
+#bebe button:disabled {
+    opacity: 0.33;
+}
+
+.coins {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
 }
 
 .coin {
@@ -31,7 +88,7 @@
     width: 2em;
     height: 2em;
     border-radius: 1em;
-    margin: .125em;
+    margin: -.125em .125em;
     background-color: #aaa;
     background-image: url("pic/pig-pad.svg");
     background-size: cover;

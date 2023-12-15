@@ -74,7 +74,6 @@ export function Bebe() {
     const welcome = (
         <div className="popup">
             <p>¡Bienvenida a la hucha cibernética de los <i>cerditos</i>!</p>
-            <br/>
             <button onClick={scanner.start} disabled={scanner.state === 'starting'}>
                 Empezar
             </button>
@@ -84,7 +83,6 @@ export function Bebe() {
     const error = (
         <div className="popup">
             <p>Este dispositivo no sabe escanear <i>cerditos</i> 😞</p>
-            <br/>
             <button onClick={scanner.start} disabled={scanner.state === 'starting'}>
                 Probar de nuevo
             </button>
@@ -158,7 +156,9 @@ export function Bebe() {
 
     const hucha = (
         <div className="hucha">
-            { status.bank.is_open ? "🔓" : "🔒"}
+            <div className={`lock lock-${status.bank.is_open ? "open" : "closed"}`}>
+                { status.bank.is_open ? "🔓" : "🔒"}
+            </div>
             <div className="coins">
                 {coins}
             </div>

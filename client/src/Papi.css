@@ -27,7 +27,6 @@
     box-sizing: border-box;
     text-transform: uppercase;
 }
-
 #papi button:active {
     background-color: var(--papi-bg);
     color: var(--papi-hl);
@@ -37,16 +36,21 @@
 #papi button:disabled {
     opacity: 0.33;
 }
+#papi button:hover {
+    text-decoration: underline;
+}
 
 #papi input {
     padding: 0 .5em;
     background-color: var(--papi-bg);
     color: var(--papi-hl);
     font-family: var(--papi-font);
-    border: 1px dashed var(--papi-hl);
+    border: 1px dashed var(--papi-fg);
     box-sizing: border-box;
 }
-
+#papi input:hover {
+    border: 1px dashed var(--papi-hl);
+}
 #papi input:focus, #papi input:active {
     border: 1px solid var(--papi-hl);
 }
@@ -62,10 +66,12 @@
     color: var(--papi-hl);
     border: 1px solid var(--papi-hl);
 }
-
 #papi input[type=checkbox]:active + label {
     color: var(--papi-hl);
     border: 1px dashed var(--papi-hl);
+}
+#papi input[type=checkbox]:hover + label {
+    text-decoration: underline;
 }
 
 .cerditos-menu {
