@@ -7,9 +7,9 @@ with pkgs;
 
 pkgs.mkShell {
   inputsFrom = [
-    # client
-    # server
-    # tools
+    client
+    server
+    tools
   ];
   packages = [
     curl
@@ -18,9 +18,10 @@ pkgs.mkShell {
   shellHook = ''
     export REPO_ROOT=`dirname ${toString ./shell.nix}`
 
-    function add-safe-symlink() {
+    function add-modules-link() {
       nix_path=$1
-      local_path=$REPO_ROOT/$2
+      local_path=$REPO_ROOT/$2/node_modules
+
       # if we already made a link, remove it to redo it
       if test -L "$local_path"; then
         \rm -rf "$local_path"
@@ -30,15 +31,14 @@ pkgs.mkShell {
       else
         ln -sf "$nix_path" "$local_path"
       fi
+
+      # expose the binaries in those node_modules
+      addToSearchPath PATH "$local_path/.bin"
     }
 
-    pushd "$REPO_ROOT/client"; npm install; popd
-    pushd "$REPO_ROOT/server"; npm install; popd
-    pushd "$REPO_ROOT/tools"; npm install; popd
-
-    addToSearchPath PATH "$REPO_ROOT/client/node_modules/.bin"
-    addToSearchPath PATH "$REPO_ROOT/server/node_modules/.bin"
-    addToSearchPath PATH "$REPO_ROOT/tools/node_modules/.bin"
+    add-modules-link ${tools-modules} tools
+    add-modules-link ${client-modules} client
+    add-modules-link ${server-modules} server
 
     # this is for the backend later...
     export HTTPS=true

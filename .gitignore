@@ -136,3 +136,4 @@ tools/node_modules
 
 # no state
 state/db.sqlite3
+state/alasql.json

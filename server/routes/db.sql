@@ -1,19 +1,20 @@
 CREATE TABLE IF NOT EXISTS banks (
-       name TEXT PRIMARY KEY not null,
+       name STRING PRIMARY KEY,
        is_open BOOLEAN DEFAULT true,
-       key INTEGER
+       [key] STRING
 );
 
 CREATE TABLE IF NOT EXISTS pigs (
-       id TEXT PRIMARY KEY not null,
-       bank TEXT DEFAULT null,
+       id STRING PRIMARY KEY,
+       bank STRING DEFAULT null,
        ready BOOLEAN DEFAULT false,
-       dream TEXT,
-       notes TEXT,
-       kind TEXT,
+       dream STRING,
+       notes STRING,
+       kind STRING,
        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
        FOREIGN KEY (bank) REFERENCES bank(name)
 );
 
-INSERT OR IGNORE INTO banks (name)
+IF NOT EXISTS(SELECT name FROM banks WHERE name='olivia')
+INSERT INTO banks (name)
 VALUES ('olivia');

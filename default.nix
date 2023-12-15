@@ -33,16 +33,25 @@ let
   #client-modules = npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/client";};
   #server-modules = npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/server";};
 
-  #napalm = pkgs.callPackage (builtins.fetchGit {
-  #  rev = "a8215ccf1c80070f51a92771f3bc637dd9b9f7ee";
-  #  url = "https://github.com/nix-community/napalm.git";
-  #}) {};
-  #tools = napalm.buildPackage "${src}/tools" {};
-  #client = napalm.buildPackage "${src}/client" {};
-  #server = napalm.buildPackage "${src}/server" {};
-  #tools-modules = "${tools}/_napalm-install/node_modules";
-  #client-modules = "${client}/_napalm-install/node_modules";
-  #server-modules = "${server}/_napalm-install/node_modules";
+  napalm = pkgs.callPackage (builtins.fetchGit {
+    rev = "a8215ccf1c80070f51a92771f3bc637dd9b9f7ee";
+    url = "https://github.com/nix-community/napalm.git";
+  }) {};
+
+  tools = napalm.buildPackage "${src}/tools" {};
+  client = napalm.buildPackage "${src}/client" {};
+  server = napalm.buildPackage "${src}/server" {};
+
+  tools-modules = "${tools}/_napalm-install/node_modules";
+  client-modules = "${client}/_napalm-install/node_modules";
+  server-modules = "${server}/_napalm-install/node_modules";
+
+  client-static = napalm.buildPackage "${src}/client" {
+    installPhase = ''
+      npm run build
+      cp -r ./build $out
+    '';
+  };
 
   #npm = pkgs.callPackage (builtins.fetchGit {
   #  rev = "991a792bccd611842f6bc1aa99fe80380ad68d44";
@@ -59,7 +68,7 @@ in
 {
   inherit pkgs
     tools tools-modules
-    client client-modules
+    client client-modules client-static
     server server-modules
   ;
 }
