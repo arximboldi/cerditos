@@ -9,6 +9,7 @@
     --bebe-radius2: .5em;
 }
 
+
 #bebe {
     color: var(--bebe-fg);
     font-size: 22px;
@@ -87,9 +88,23 @@
     display: inline-block;
     width: 2em;
     height: 2em;
-    border-radius: 1em;
+    border-radius: 2em;
     margin: -.125em .125em;
     background-color: #aaa;
-    background-image: url("pic/pig-pad.svg");
+    background-image: url("pic/pig-pad-color.svg");
     background-size: cover;
+    border: 1.5px solid white;
+}
+
+.kind-yellow {
+    background-color: #E1FF41 !important;
+}
+.kind-pink {
+    background-color: #F9B7C4 !important;
+}
+.kind-green {
+    background-color: #83F2C3 !important;
+}
+.kind-lila {
+    background-color: #D8C4FF !important;
 }
