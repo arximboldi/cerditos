@@ -6,13 +6,12 @@ CREATE TABLE IF NOT EXISTS banks (
 
 CREATE TABLE IF NOT EXISTS pigs (
        id STRING PRIMARY KEY,
-       bank STRING DEFAULT null,
+       bank STRING DEFAULT null REFERENCES bank(name),
        ready BOOLEAN DEFAULT false,
        dream STRING,
        notes STRING,
        kind STRING,
-       timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-       FOREIGN KEY (bank) REFERENCES bank(name)
+       timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 IF NOT EXISTS(SELECT name FROM banks WHERE name='olivia')
