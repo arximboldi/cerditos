@@ -2,47 +2,34 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
-
 const stateDir = process.env.STATE_DIR;
-const stateFile = process.env.STATE_FILE || "localstorage";
+const stateFile = process.env.STATE_FILE || "alasql.json";
 const defaultBank = 'olivia';
 
 async function ensureDatabase(dir, file) {
-    const fullPath = path.join(dir, file)
-    const dbInitFile = path.join(__dirname, 'db.sql');
-    var needsInit = false;
-
-    if (!fs.existsSync(fullPath)) {
-        fs.mkdirSync(fullPath, {recursive: true});
-        needsInit = true;
-    }
-
-    const {LocalStorage} = require('node-localstorage');
-    globalThis.localStorage = new LocalStorage(stateFile);
     const alasql = require('alasql');
     alasql.errorlog = true;
+
+    const fullPath = path.join(dir, file)
+    const dbInitFile = path.join(__dirname, 'db.sql');
     const db = alasql.promise;
 
     if (!dir)
         throw Error("need STATE_DIR for the database");
 
-    console.log("creating database:", fullPath);
-    await db(`CREATE localstorage DATABASE IF NOT EXISTS cerditos`);
+    if (!fs.existsSync(dir))
+        fs.mkdirSync(dir, {recursive: true});
 
     console.log("opening database:", fullPath);
-
     await db([
-        `ATTACH localstorage DATABASE cerditos;`,
-        'USE cerditos;'
+        `CREATE FILESTORAGE DATABASE IF NOT EXISTS "${fullPath}"`,
+        `ATTACH FILESTORAGE DATABASE cerditos_file("${fullPath}");`,
+        'USE cerditos_file;'
     ]);
 
     console.log("preparing database with:", dbInitFile);
     const data = fs.readFileSync(dbInitFile, 'utf8');
     await db(data);
-
-    console.log(alasql.databases["cerditos"]);
-    console.log(alasql.databases["cerditos"].tables["pigs"]);
-    //alasql.databases["cerditos"].tables["pigs"].defaultfns = "'timestamp':alasql.stdfn.CURRENT_TIMESTAMP()";
 
     console.log("database ready.");
     return db;
@@ -84,7 +71,6 @@ router.get('/status', wrapper(async (req, res) => {
 router.get('/state', wrapper(async (req, res) => {
     const banks = await db('SELECT * FROM banks');
     const pigs = await db('SELECT * FROM pigs');
-    console.log(pigs);
     res.send({
         banks: banks,
         pigs: pigs,
@@ -114,7 +100,7 @@ router.post('/toggle', wrapper(async (req, res) => {
 router.post('/add', wrapper(async (req, res) => {
     const {id} = req.body;
     console.log("adding pig:", id);
-    await db('INSERT INTO pigs (id, timestamp) VALUES (?, CURRENT_TIMESTAMP)', [id]);
+    await db('INSERT INTO pigs (id, timestamp) VALUES (?, ?)', [id, new Date()]);
     res.send({id: id});
 }))
 
