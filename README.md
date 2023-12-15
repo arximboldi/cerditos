@@ -1,8 +1,10 @@
-# cerditos
-
 ![logo](client/src/pic/backs.svg)
 
-Cerditos is a physical-virtual currency for dirty little animals.
+<p align=center>
+    <i>Cerditos is a physical-virtual currency for dirty little animals.</i>
+</p>
+
+# cerditos
 
 ## Development environment
 
