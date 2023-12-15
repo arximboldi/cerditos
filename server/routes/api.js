@@ -7,15 +7,15 @@ const stateFile = process.env.STATE_FILE || "alasql.json";
 const defaultBank = 'olivia';
 
 async function ensureDatabase(dir, file) {
+    if (!dir)
+        throw Error("need STATE_DIR for the database");
+
     const alasql = require('alasql');
     alasql.errorlog = true;
 
     const fullPath = path.join(dir, file)
     const dbInitFile = path.join(__dirname, 'db.sql');
     const db = alasql.promise;
-
-    if (!dir)
-        throw Error("need STATE_DIR for the database");
 
     if (!fs.existsSync(dir))
         fs.mkdirSync(dir, {recursive: true});
