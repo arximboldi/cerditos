@@ -35,7 +35,7 @@ async function ensureDatabase(dir, file) {
     return db;
 }
 
-var db = () => {
+var db = async () => {
     throw Error("database is not initialized");
 };
 
