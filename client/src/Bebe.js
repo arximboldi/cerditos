@@ -74,7 +74,9 @@ export function Bebe() {
     const welcome = (
         <div className="popup">
             <p>¡Bienvenida a la hucha cibernética de los <i>cerditos</i>!</p>
-            <button onClick={scanner.start} disabled={scanner.state === 'starting'}>
+            <button className="important"
+                    onClick={scanner.start}
+                    disabled={scanner.state === 'starting'}>
                 Empezar
             </button>
         </div>
@@ -111,7 +113,7 @@ export function Bebe() {
                   <div className="popup">
                       <p>¡Este cerdito está en la hucha!</p>
                       {status.bank.is_open ? (
-                          <button onClick={takeCandidate}>
+                          <button className="important" onClick={takeCandidate}>
                               Sacar de la hucha
                           </button>
                       ) : (
@@ -129,7 +131,7 @@ export function Bebe() {
               ) : pig.ready ? (
                   <div className="popup">
                       <p>¡Este cerdito está listo para contarte lo que ha soñado!</p>
-                      <button onClick={revealCandidate}>
+                      <button className="important" onClick={revealCandidate}>
                           Revelar sueño
                       </button>
                       <button onClick={discardCandidate}>
@@ -139,7 +141,7 @@ export function Bebe() {
               ) : (
                   <div className="popup">
                       <p>¡Has encontrado un nuevo cerdito!</p>
-                      <button onClick={saveCandidate}>
+                      <button className="important" onClick={saveCandidate}>
                           Meter en la hucha
                       </button>
                       <button onClick={discardCandidate}>

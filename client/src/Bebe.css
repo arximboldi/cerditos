@@ -53,29 +53,44 @@
 #bebe button {
     display: inline-block;
     text-align: center;
-    padding: 0 .5em 0 .25em;
+    padding: 0 .7em 0 .5em;
     margin-bottom: .5em;
-    border-radius: var(--bebe-radius2);
+    border-radius: 2em;
     background-color: var(--bebe-bg2);
     color: var(--bebe-hl);
     font-family: var(--bebe-font);
     font-size: 1em;
-    border: 1px solid var(--bebe-hl);
+    border: 1.5px solid var(--bebe-hl);
     box-sizing: border-box;
     text-transform: uppercase;
 }
 #bebe button:hover {
-    text-decoration: underline;
+    box-shadow: 0 0 .125em .125em var(--bebe-fg);
 }
 #bebe button:active {
     background-color: var(--bebe-bg2);
     color: var(--bebe-hl);
     font-family: var(--bebe-font);
-    border: 1px dashed var(--bebe-hl);
+    box-shadow: 0 0 .25em .25em var(--bebe-fg);
 }
 #bebe button:disabled {
     opacity: 0.33;
 }
+
+
+#bebe button.important {
+    background-color: var(--bebe-fg);
+    color: var(--bebe-bg2);
+    border-color: var(--bebe-hl);
+}
+#bebe button.imporant:hover {
+}
+#bebe button.imporant:active {
+    background-color: var(--bebe-bg2);
+    color: var(--bebe-hl);
+    border-color: var(--bebe-hl);
+}
+
 
 .coins {
     position: absolute;
