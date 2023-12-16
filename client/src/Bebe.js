@@ -155,7 +155,7 @@ export function Bebe() {
               ) : (
                   <div className="popup">
                       {candidateCoin}
-                      <p>¡Has encontrado un nuevo cerdito!</p>
+                      <p>¡Has encontrado un cerdito!</p>
                       <button className="important" onClick={saveCandidate}>
                           Meter en la hucha
                       </button>
@@ -184,9 +184,11 @@ export function Bebe() {
 
     return (
         <div id="bebe">
-            {scanner.state == 'idle' || scanner.state == 'starting' ? welcome
-             : scanner.state == 'error' ? error
-             : candidateMessage}
+            <div class="popup-container">
+                {scanner.state == 'idle' || scanner.state == 'starting' ? welcome
+                 : scanner.state == 'error' ? error
+                 : candidateMessage}
+            </div>
             {hucha}
         </div>
     );
