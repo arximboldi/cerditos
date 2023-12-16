@@ -81,6 +81,12 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
 }
+.popup.dream {
+    background-color: var(--bebe-fg);
+    color: var(--bebe-bg);
+    font-weight: bold;
+}
+
 
 .popup p {
     margin: 0;
@@ -95,11 +101,11 @@ body {
 #bebe button {
     display: inline-block;
     text-align: center;
-    padding: 0 .7em 0 .5em;
+    padding: .125em .7em .125em .5em;
     margin-bottom: .5em;
     margin-left: .25em;
     margin-right: .25em;
-    border-radius: 2em;
+    border-radius: 3em;
     background-color: var(--bebe-bg);
     color: var(--bebe-fg);
     font-family: var(--bebe-font);
@@ -121,6 +127,21 @@ body {
     opacity: 0.33;
 }
 
+
+#bebe .dream button {
+    background-color: var(--bebe-fg);
+    color: var(--bebe-bg);
+    border-color: var(--bebe-bg);
+}
+#bebe .dream button:hover {
+    box-shadow-color: var(--bebe-bg);
+}
+#bebe .dream button:active {
+    background-color: var(--bebe-fg);
+    color: var(--bebe-bg);
+    border-color: var(--bebe-bg);
+    box-shadow-color: var(--bebe-bg);
+}
 
 #bebe button.important {
     background-color: var(--bebe-fg);
@@ -163,10 +184,14 @@ body {
     margin: 0;
     width: 3em;
     height: 3em;
-    border: 1.5px solid var(--bebe-fg);
+    border: 1.75px solid var(--bebe-fg);
     position: absolute;
-    top: -2em;
+    top: -1.75em;
     left: calc(50% - 1.5em);
+}
+
+.popup .coin + p {
+    margin-top: .25em;
 }
 
 .kind-yellow {

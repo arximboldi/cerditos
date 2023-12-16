@@ -13,12 +13,11 @@ code {
 }
 
 .loading-indicator:after {
-    content: 'Loading';
+    content: '🐷';
     position: fixed;
-    top: 0;
-    right: 0;
+    top: .25em;
+    right: .25em;
     z-index: 1001;
-    color: red;
     text-align:center;
     text-transform: uppercase;
     font-weight:bold;

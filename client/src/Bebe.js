@@ -104,8 +104,9 @@ export function Bebe() {
     const candidateMessage =
           candidate == null ? null
           : candidate.dream != null ? (
-              <div className="popup">
-                  <p><i>He soñado que {candidate.dream}.</i></p>
+              <div className="popup dream">
+                  {candidateCoin}
+                  <p>He soñado que {candidate.dream}.</p>
                   <button onClick={discardCandidate}>
                       ¡Qué bien!
                   </button>
@@ -144,8 +145,11 @@ export function Bebe() {
                       <button className="important" onClick={revealCandidate}>
                           Revelar sueño
                       </button>
+                      <button onClick={saveCandidate}>
+                          Devolver a la hucha
+                      </button>
                       <button onClick={discardCandidate}>
-                          En otro momento
+                          Cancelar
                       </button>
                   </div>
               ) : (
