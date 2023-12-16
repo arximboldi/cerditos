@@ -114,7 +114,7 @@ router.post('/remove', wrapper(async (req, res) => {
 router.post('/save', wrapper(async (req, res) => {
     const {id} = req.body;
     console.log("put pig in bank:", id);
-    await db('UPDATE pigs SET bank=? WHERE id=?', [defaultBank, req.body.id]);
+    await db('UPDATE pigs SET bank=?, ready=false WHERE id=?', [defaultBank, req.body.id]);
     res.send({id: req.body.id, bank: defaultBank});
 }))
 
