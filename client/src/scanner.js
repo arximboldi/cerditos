@@ -46,6 +46,10 @@ export function useScanner(cb) {
         setState('idle');
     };
 
+    function cancel() {
+        setState('');
+    };
+
     const active =
           state == 'starting' ||
           state === 'scanning';
@@ -73,5 +77,6 @@ export function useScanner(cb) {
         state: state,
         start: start,
         stop: stop,
+        cancel: cancel,
     };
 }

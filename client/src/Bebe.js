@@ -85,11 +85,21 @@ export function Bebe() {
     const error = (
         <div className="popup">
             <p>Este dispositivo no sabe escanear <i>cerditos</i> 😞</p>
-            <button onClick={scanner.start} disabled={scanner.state === 'starting'}>
+            <button className="important"
+                    onClick={scanner.start}
+                    disabled={scanner.state === 'starting'}>
                 Probar de nuevo
+            </button>
+            <button onClick={scanner.cancel}>
+                Cancelar
             </button>
         </div>
     );
+
+    const candidateCoin =
+          candidate == null || !status.pigs.has(candidate.id) ? null : (
+              <div className={`coin kind-${status.pigs.get(candidate.id).kind}`}></div>
+          );
 
     const candidateMessage =
           candidate == null ? null
@@ -111,17 +121,16 @@ export function Bebe() {
               const pig = status.pigs.get(candidate.id);
               return pig.bank == defaultBank ? (
                   <div className="popup">
+                      {candidateCoin}
                       <p>¡Este cerdito está en la hucha!</p>
                       {status.bank.is_open ? (
                           <button className="important" onClick={takeCandidate}>
                               Sacar de la hucha
                           </button>
                       ) : (
-                          <p>
-                              <i>
-                                  La hucha está cerrada.
-                                  Para abrir la hucha necesitas el cerdito llave
-                             </i>
+                          <p className="annotation">
+                              La hucha está cerrada.<br/>
+                              Para abrir la hucha necesitas el cerdito llave.
                           </p>
                       )}
                       <button onClick={discardCandidate}>
@@ -130,6 +139,7 @@ export function Bebe() {
                   </div>
               ) : pig.ready ? (
                   <div className="popup">
+                      {candidateCoin}
                       <p>¡Este cerdito está listo para contarte lo que ha soñado!</p>
                       <button className="important" onClick={revealCandidate}>
                           Revelar sueño
@@ -140,6 +150,7 @@ export function Bebe() {
                   </div>
               ) : (
                   <div className="popup">
+                      {candidateCoin}
                       <p>¡Has encontrado un nuevo cerdito!</p>
                       <button className="important" onClick={saveCandidate}>
                           Meter en la hucha
@@ -152,7 +163,7 @@ export function Bebe() {
           })();
 
     const coins = status.pigs.toArray().filter(([k,p]) => p.bank == defaultBank).map(([k,p]) =>
-        <div key={k} className={`coin kind-${p.kind}`}>
+        <div key={k} className={`coin kind-${p.kind} ${candidate && candidate.id==k ? "candidate" : ""}`}>
         </div>
     );
 
