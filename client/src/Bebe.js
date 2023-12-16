@@ -5,8 +5,6 @@ import {
 
 import {Map} from 'immutable';
 
-import logo from './logo.svg';
-
 import './Bebe.css';
 
 import {client, debounce, defaultBank} from './service';
@@ -73,7 +71,7 @@ export function Bebe() {
 
     const welcome = (
         <div className="popup">
-            <p>¡Bienvenida a la hucha cibernética de los <i>cerditos</i>!</p>
+            <p>¡Bienvenida a la hucha digital de los cerditos!</p>
             <button className="important"
                     onClick={scanner.start}
                     disabled={scanner.state === 'starting'}>
@@ -84,7 +82,7 @@ export function Bebe() {
 
     const error = (
         <div className="popup">
-            <p>Este dispositivo no sabe escanear <i>cerditos</i> 😞</p>
+            <p>😞<br/>Este dispositivo no sabe escanear cerditos.</p>
             <button className="important"
                     onClick={scanner.start}
                     disabled={scanner.state === 'starting'}>
@@ -185,7 +183,7 @@ export function Bebe() {
     return (
         <div id="bebe">
             <div class="popup-container">
-                {scanner.state == 'idle' || scanner.state == 'starting' ? welcome
+                {scanner.state == 'idle' ? welcome
                  : scanner.state == 'error' ? error
                  : candidateMessage}
             </div>
