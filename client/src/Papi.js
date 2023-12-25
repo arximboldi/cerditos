@@ -4,12 +4,18 @@ import {
     useCallback,
 } from 'react';
 
-import {Map} from 'immutable';
+import {Map, Set} from 'immutable';
 
 import {client, debounce, defaultBank, defaultKinds} from './service';
 import {useScanner} from './scanner';
 
 import './Papi.css';
+
+const stateTypes = ['fuera', 'hucha', 'listo'];
+
+function setToggle(s, v) {
+    return s.has(v) ? s.delete(v) : s.add(v);
+}
 
 export function Papi() {
     const [editMode, setEditMode] = useState(false);
@@ -20,6 +26,27 @@ export function Papi() {
     });
 
     const [candidates, setCandidates] = useState(new Map());
+
+    const [filter, setFilter] = useState({
+        kinds: new Set(),
+        states: new Set(),
+    });
+
+    function filterPig([id, p]) {
+        return (filter.kinds.isEmpty() || filter.kinds.has(p.kind)) &&
+            (filter.states.isEmpty()
+             || (filter.states.has('listo') && p.ready)
+             || (filter.states.has('hucha') && p.bank)
+             || (filter.states.has('fuera') && !p.bank));
+    }
+
+    function toggleFilterKind(k) {
+        setFilter({...filter, kinds: setToggle(filter.kinds, k) });
+    }
+
+    function toggleFilterState(k) {
+        setFilter({...filter, states: setToggle(filter.states, k) });
+    }
 
     function addCandidate(id) {
         setCandidates((v) => v.set(id, 'init'));
@@ -133,7 +160,7 @@ export function Papi() {
         );
     })
 
-    const pigs = state.pigs.toArray().map(([id, p]) => {
+    const pigs = state.pigs.toArray().filter(filterPig).map(([id, p]) => {
         const isSelected = candidates.has(id);
         return (
             <li key={id}
@@ -197,7 +224,7 @@ export function Papi() {
 
     return (
         <div className="papi" id="papi">
-            <h1>El panel de papi!</h1>
+            <h1>¡El panel de control de papi!</h1>
             {
                 scanner.state === 'idle' ? (<button onClick={scanner.start}>ESCANEAR!</button>)
                     : scanner.state === 'starting' ? (<p>Empezando a escanear...</p>)
@@ -207,7 +234,7 @@ export function Papi() {
             }
             <ul className="candidates">{popups}</ul>
             <h3>
-                Cerditos
+                Cerditos {state.pigs.size}/{pigs.length}
             </h3>
             <div className="cerditos-menu">
                 <input type="checkbox" id="edit-mode"
@@ -218,6 +245,28 @@ export function Papi() {
             <ul className="banks">
                 {banks}
             </ul>
+            <div className="filters">
+                tipo: {
+                    defaultKinds.map((kind) => (
+                        <>
+                            <input type="checkbox" id={`kind-filter-${kind}`}
+                                   checked={filter.kinds.has(kind)}
+                                   onChange={(e)=>toggleFilterKind(kind)}/>
+                            <label htmlFor={`kind-filter-${kind}`}>{kind}</label>
+                        </>
+                    ))
+                }
+                &nbsp; estado: {
+                    stateTypes.map((s) => (
+                        <>
+                            <input type="checkbox" id={`state-filter-${s}`}
+                                   checked={filter.states.has(s)}
+                                   onChange={(e)=>toggleFilterState(s)}/>
+                            <label htmlFor={`state-filter-${s}`}>{s}</label>
+                        </>
+                    ))
+                }
+            </div>
             <ul className="pigs">
                 {pigs}
             </ul>

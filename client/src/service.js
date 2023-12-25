@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const client = axios.create({baseURL: "/api"});
 export const defaultBank = 'olivia';
-export const defaultKinds = ['pink', 'green', 'lila', 'yellow'];
+export const defaultKinds = ['pink', 'lila', 'green', 'yellow'];
 
 client.interceptors.request.use(function (config) {
     document.body.classList.add('loading-indicator');
