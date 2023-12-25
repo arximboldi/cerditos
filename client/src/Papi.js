@@ -172,6 +172,7 @@ export function Papi() {
             <li key={id}
                 className={isSelected ? "selected" : ""}>
                 <p className="pig-header">
+                    <span className={`pig-header-kind kind-${p.kind}`}></span>
                     <span className="pig-id">{id}</span>
                     <span className="pig-controls">
                         <span className="pig-tag">
@@ -205,12 +206,12 @@ export function Papi() {
                 <p>
                     <span className="pig-label">tipo:</span>
                     {!editMode ? p.kind : defaultKinds.map((kind) => (
-                        <>
+                        <span key={kind}>
                             <input type="checkbox" id={`pig-kind-${kind}-${id}`}
                                    checked={p.kind == kind}
                                    onChange={(e)=>changeKind(id, kind)}/>
                             <label htmlFor={`pig-kind-${kind}-${id}`}>{kind}</label>
-                        </>
+                        </span>
                     ))}
                 </p>
             </li>
@@ -254,22 +255,22 @@ export function Papi() {
             <div className="filters">
                 tipo: {
                     defaultKinds.map((kind) => (
-                        <>
+                        <span key={kind}>
                             <input type="checkbox" id={`kind-filter-${kind}`}
                                    checked={filter.kinds.has(kind)}
                                    onChange={(e)=>toggleFilterKind(kind)}/>
                             <label htmlFor={`kind-filter-${kind}`}>{kind}</label>
-                        </>
+                        </span>
                     ))
                 }
                 &nbsp; estado: {
                     stateTypes.map((s) => (
-                        <>
+                        <span key={s}>
                             <input type="checkbox" id={`state-filter-${s}`}
                                    checked={filter.states.has(s)}
                                    onChange={(e)=>toggleFilterState(s)}/>
                             <label htmlFor={`state-filter-${s}`}>{s}</label>
-                        </>
+                        </span>
                     ))
                 }
             </div>

@@ -104,6 +104,14 @@
 .pigs .pig-header {
     line-height: 1.5em;
 }
+.pigs .pig-header-kind {
+    width: 1em;
+    height: 1em;
+    border-radius: 1em;
+    display: inline-block;
+    margin-right: .5em;
+    margin-left: -.5em;
+}
 .pigs p {
     display:table;
     padding: 0;
@@ -124,7 +132,9 @@
 .pig-label {
     display: table-cell;
     padding: .25em 0;
-    width: 5em;
+    width: 4em;
+    color: var(--papi-hl);
+    opacity: 0.5;
 }
 .pigs input {
     display: table-cell;
