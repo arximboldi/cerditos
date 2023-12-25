@@ -12,6 +12,7 @@ import {useScanner} from './scanner';
 import './Papi.css';
 
 const stateTypes = ['fuera', 'hucha', 'listo'];
+const showTypes = ['sueño', 'notas', 'tipo'];
 
 function setToggle(s, v) {
     return s.has(v) ? s.delete(v) : s.add(v);
@@ -31,6 +32,8 @@ export function Papi() {
         kinds: new Set(),
         states: new Set(),
     });
+
+    const [show, setShow] = useState(new Set());
 
     function filterPig([id, p]) {
         return (filter.kinds.isEmpty() || filter.kinds.has(p.kind)) &&
@@ -189,31 +192,34 @@ export function Papi() {
                         ) : null}
                     </span>
                 </p>
-                <p>
-                    <span className="pig-label">sueño:</span>
-                    {!editMode ? p.dream : (
-                        <input defaultValue={p.dream || ""}
-                               onChange={(e)=>changeDream(id, e.target.value)}/>
-                    )}
-                </p>
-                <p>
-                    <span className="pig-label">notas:</span>
-                    {!editMode ? p.notes : (
-                        <input defaultValue={p.notes || ""}
-                               onChange={(e)=>changeNotes(id, e.target.value)}/>
-                    )}
-                </p>
-                <p>
-                    <span className="pig-label">tipo:</span>
-                    {!editMode ? p.kind : defaultKinds.map((kind) => (
-                        <span key={kind}>
-                            <input type="checkbox" id={`pig-kind-${kind}-${id}`}
-                                   checked={p.kind == kind}
-                                   onChange={(e)=>changeKind(id, kind)}/>
-                            <label htmlFor={`pig-kind-${kind}-${id}`}>{kind}</label>
-                        </span>
-                    ))}
-                </p>
+                {show.has('sueño') && (
+                    <p>
+                        <span className="pig-label">sueño:</span>
+                        {!editMode ? p.dream : (
+                            <input defaultValue={p.dream || ""}
+                                   onChange={(e)=>changeDream(id, e.target.value)}/>
+                        )}
+                    </p>)}
+                {show.has('notas') && (
+                    <p>
+                        <span className="pig-label">notas:</span>
+                        {!editMode ? p.notes : (
+                            <input defaultValue={p.notes || ""}
+                                   onChange={(e)=>changeNotes(id, e.target.value)}/>
+                        )}
+                    </p>)}
+                {show.has('tipo') && (
+                    <p>
+                        <span className="pig-label">tipo:</span>
+                        {!editMode ? p.kind : defaultKinds.map((kind) => (
+                            <span key={kind}>
+                                <input type="checkbox" id={`pig-kind-${kind}-${id}`}
+                                       checked={p.kind == kind}
+                                       onChange={(e)=>changeKind(id, kind)}/>
+                                <label htmlFor={`pig-kind-${kind}-${id}`}>{kind}</label>
+                            </span>
+                        ))}
+                    </p>)}
             </li>
         );
     });
@@ -244,6 +250,16 @@ export function Papi() {
                 Cerditos {state.pigs.size}/{pigs.length}
             </h3>
             <div className="cerditos-menu">
+                {
+                    showTypes.map((t) => (
+                        <span key={t}>
+                            <input type="checkbox" id={`show-${t}`}
+                                   defaultChecked={show.has(t)}
+                                   onChange={(e)=>setShow(setToggle(show, t))} />
+                            <label htmlFor={`show-${t}`}>{t}</label>
+                        </span>
+                    ))
+                }&nbsp;
                 <input type="checkbox" id="edit-mode"
                        defaultChecked={editMode}
                        onChange={(e)=>setEditMode(e.target.checked)}/>
