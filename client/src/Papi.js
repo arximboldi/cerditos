@@ -65,7 +65,9 @@ export function Papi() {
         const {data} = await client.get("/state")
         setState({
             banks: new Map(data.banks.map((p) => [p.name, p])),
-            pigs:  new Map(data.pigs.map((p) => [p.id, p])),
+            pigs:  new Map(data.pigs.map((p) => [p.id, {
+                ...p, timestamp: new Date(p.timestamp)
+            }])),
         });
     }
 
@@ -160,7 +162,11 @@ export function Papi() {
         );
     })
 
-    const pigs = state.pigs.toArray().filter(filterPig).map(([id, p]) => {
+    const thePigs = state.pigs.toArray()
+          .filter(filterPig)
+          .sort(([_1, a], [_2, b]) => b.timestamp.getTime() - a.timestamp.getTime());
+
+    const pigs = thePigs.map(([id, p]) => {
         const isSelected = candidates.has(id);
         return (
             <li key={id}
