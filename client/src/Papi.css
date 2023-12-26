@@ -105,12 +105,13 @@
     line-height: 1.5em;
 }
 .pigs .pig-header-kind {
-    width: 1em;
-    height: 1em;
+    width: 1.25em;
+    height: 1.25em;
     border-radius: 1em;
     display: inline-block;
     margin-right: .5em;
     margin-left: -.5em;
+    margin-bottom: -.25em;
 }
 .pigs p {
     display:table;
