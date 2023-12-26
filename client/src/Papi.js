@@ -149,16 +149,19 @@ export function Papi() {
             <li className="candidate" key={k}>
                 <p>{k}</p>
                 <button onClick={()=>makeKey(k)}
-                        disabled={isKey || isInserted}>
+                        disabled={isKey || isInserted}
+                        tabindex="-1">
                     Hacer llave
                 </button>
                 <span>&nbsp;</span>
                 <button onClick={()=>insertPigCandidate(k)}
-                        disabled={isInserted}>
+                        disabled={isInserted}
+                        tabindex="-1">
                     Añadir
                 </button>
                 <span>&nbsp;</span>
-                <button onClick={()=>discardCandidate(k)}>
+                <button onClick={()=>discardCandidate(k)}
+                        tabindex="-1">
                     Descartar
                 </button>
             </li>
@@ -183,12 +186,12 @@ export function Papi() {
                             {!editMode && p.ready ? "[listo]" : null}
                         </span>
                         {editMode ? (
-                            p.bank == defaultBank ? (<button onClick={()=>takePig(id)}>Sacar</button>)
-                                : p.ready ? (<button onClick={()=>revealPig(id)}>Usar</button>)
-                                : (<button onClick={()=>savePig(id)}>Meter</button>)
+                            p.bank == defaultBank ? (<button onClick={()=>takePig(id)} tabindex="-1">Sacar</button>)
+                                : p.ready ? (<button onClick={()=>revealPig(id)} tabindex="-1">Usar</button>)
+                                : (<button onClick={()=>savePig(id)} tabindex="-1">Meter</button>)
                         ) : null}
                         {editMode ? (
-                            <button onClick={()=>removePig(id)}>Borrar</button>
+                            <button onClick={()=>removePig(id)} tabindex="-1">Borrar</button>
                         ) : null}
                     </span>
                 </p>
@@ -205,7 +208,8 @@ export function Papi() {
                         <span className="pig-label">notas:</span>
                         {!editMode ? p.notes : (
                             <input defaultValue={p.notes || ""}
-                                   onChange={(e)=>changeNotes(id, e.target.value)}/>
+                                   onChange={(e)=>changeNotes(id, e.target.value)}
+                                   tabindex="-1"/>
                         )}
                     </p>)}
                 {show.has('tipo') && (
@@ -255,7 +259,8 @@ export function Papi() {
                         <span key={t}>
                             <input type="checkbox" id={`show-${t}`}
                                    defaultChecked={show.has(t)}
-                                   onChange={(e)=>setShow(setToggle(show, t))} />
+                                   onChange={(e)=>setShow(setToggle(show, t))}
+                                   tabindex="-1"/>
                             <label htmlFor={`show-${t}`}>{t}</label>
                         </span>
                     ))
@@ -274,7 +279,8 @@ export function Papi() {
                         <span key={kind}>
                             <input type="checkbox" id={`kind-filter-${kind}`}
                                    checked={filter.kinds.has(kind)}
-                                   onChange={(e)=>toggleFilterKind(kind)}/>
+                                   onChange={(e)=>toggleFilterKind(kind)}
+                                   tabindex="-1"/>
                             <label htmlFor={`kind-filter-${kind}`}>{kind}</label>
                         </span>
                     ))
@@ -284,7 +290,8 @@ export function Papi() {
                         <span key={s}>
                             <input type="checkbox" id={`state-filter-${s}`}
                                    checked={filter.states.has(s)}
-                                   onChange={(e)=>toggleFilterState(s)}/>
+                                   onChange={(e)=>toggleFilterState(s)}
+                                   tabindex="-1"/>
                             <label htmlFor={`state-filter-${s}`}>{s}</label>
                         </span>
                     ))
