@@ -6,10 +6,13 @@
     url    = "https://github.com/nixos/nixpkgs/archive/${rev}.tar.gz";
     sha256 = sha256;
   },
+  system   ? builtins.currentSystem,
   ...
 }:
 
-with import nixpkgs {};
+with import nixpkgs {
+  inherit system;
+};
 
 let
   gitignoreSource = (import (pkgs.fetchFromGitHub {
