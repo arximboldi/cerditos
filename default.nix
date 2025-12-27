@@ -18,23 +18,23 @@ let
   gitignoreSource = (import (pkgs.fetchFromGitHub {
     owner = "hercules-ci";
     repo = "gitignore.nix";
-    rev = "80463148cd97eebacf80ba68cf0043598f0d7438";
-    sha256 = "1l34rmh4lf4w8a1r8vsvkmg32l1chl0p593fl12r28xx83vn150v";
+    rev = "cb5e3fdca1de58ccbc3ef53de65bd372b48f567c";
+    sha256 = "sha256-XmjITeZNMTQXGhhww6ed/Wacy2KzD6svioyCX7pkUu4=";
   }) { inherit lib; }).gitignoreSource;
 
 
   src = gitignoreSource ./.;
 
-  #npmlock2nix = pkgs.callPackage (builtins.fetchGit {
-  #  rev = "9197bbf397d76059a76310523d45df10d2e4ca81";
-  #  url = "https://github.com/nix-community/npmlock2nix.git";
-  #}) {};
-  #tools  = npmlock2nix.v2.build {nodejs=pkgs.nodejs_21;src="${src}/tools"; installPhase="";};
-  #client = npmlock2nix.v2.build {nodejs=pkgs.nodejs_21;src="${src}/client"; installPhase="";};
-  #server = npmlock2nix.v2.build {nodejs=pkgs.nodejs_21;src="${src}/server"; installPhase="";};
-  #tools-modules =  npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/tools";};
-  #client-modules = npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/client";};
-  #server-modules = npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/server";};
+  # npmlock2nix = pkgs.callPackage (builtins.fetchGit {
+  #   rev = "9197bbf397d76059a76310523d45df10d2e4ca81";
+  #   url = "https://github.com/nix-community/npmlock2nix.git";
+  # }) {};
+  # tools  = npmlock2nix.v2.build {nodejs=pkgs.nodejs_21;src="${src}/tools"; installPhase="";};
+  # client = npmlock2nix.v2.build {nodejs=pkgs.nodejs_21;src="${src}/client"; installPhase="";};
+  # server = npmlock2nix.v2.build {nodejs=pkgs.nodejs_21;src="${src}/server"; installPhase="";};
+  # tools-modules =  npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/tools";};
+  # client-modules = npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/client";};
+  # server-modules = npmlock2nix.v2.node_modules {nodejs=pkgs.nodejs_21;src="${src}/server";};
 
   napalm = pkgs.callPackage (builtins.fetchGit {
     rev = "a8215ccf1c80070f51a92771f3bc637dd9b9f7ee";
